@@ -10,11 +10,11 @@ Já dentro de um laboratório o Aluno irá, dependendo do laboratório ter acess
 
 Se o aluno abandonar a sala do laboratório antes do tempo do seu slot terminar, o próximo aluno na fila irá poder entrar então no mesmo laboratório. Antes de este sair do laboratório, se previamente ao fim do seu slot uma mensagem de verificação irá aparecer. Se o aluno exceder o seu slot de tempo, uma mensagem aparece a avisar e o próximo aluno da fila pode então entrar no laboratório.
 
+Um professor, ao aceder ao site, necessita também de se autenticar. Poderá também criar conta ou fazer login. Caso crie uma conta precisará, como o aluno, de um código gerado, desta vez por um Administrador. Em ambos os casos, caso haja sucesso na autenticação, o Professor é reencaminhado para a sua home page.
 
-Um professor, ao aceder ao site, necessita também de se autenticar. Poderá também criar conta ou fazer login. Caso crie uma ocnta precisará, como o aluno, de um código gerado, desta vez por um Administrador. Em ambos os casos, caso haja sucesso na autenticação, o Professor é reencaminhado para a sua home page.
+Um professor pode alternar entre visualizar como aluno ou como professor. Ao autenticar-se pode escolher entrar como aluno ou como professor (Baseado no Moodle). 
 
-Nesta este terá a possibilidade de, como o aluno ver as definições de conta. Terá também na sua dashboard todas os laboratórios criados. Caso um Professor escolhe um dos laboratórios, este terá as opções de:
-
+Como professor este terá a possibilidade de, como o aluno ver as definições de conta. Terá também na sua dashboard todas os laboratórios criados. Caso um Professor escolhe um dos laboratórios, este terá as opções de:
 
 # Initial Ideas
 
@@ -22,6 +22,7 @@ Nesta este terá a possibilidade de, como o aluno ver as definições de conta. 
 > - [ ]  No dashboard existir um calendário. Este calendário possibilitará a marcação de sessões nos laboratórios.
 > - [ ]  Fila de espera para os laboratórios.
 > - [ ]  Caso o Aluno tenha marcado uma sessão, tem de estar na fila de espera para entrar na mesma para ganhar prioridade.
+> - [ ]  Existir um histório de utilização dos laboratórios.
 
 # Roles
 
@@ -30,4 +31,19 @@ Cada role tem permissões únicas e as roles acima herdam as permissões das de 
 
 ## Aluno
 
-> Role mais baixa. Tem as permissões necessárias para configurar
+> Role mais baixa. É atribuida automaticamente aquando a criação de um conta. Tem as seguintes permissões:
+> - [ ] Entrar em laboratórios.
+> - [ ] Configurar, visualizar e manipular a placa (se estiver dentro de um laboratório).
+> - [ ] Marcar sessões através do calendário.
+> - [ ] Fazer as alterações necessárias na sua conta (Alterações ainda por decidir).
+
+## Professor
+
+> Role intermédia. Esta á atribuida a um docente. Só pode ser atribuida por um utilizador com a role de Professor ou por um Administrador. Esta herda as permissões de Aluno e ainda tem as seguintes permissões:
+> - [ ] Criar/manipular/apagar laboratórios.
+> - [ ] Gerar códigos para utilizadores criarem conta.
+> - [ ] Ver histório de utilização de um laboratório.
+
+## Administrador
+
+> Role mais alta. É atribuida somente a um utilizador que será o administrador do sistema. Herda todas as permissões das roles abaixo dela.
