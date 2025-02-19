@@ -46,4 +46,4 @@ Cada role tem permissões únicas e as roles acima herdam as permissões das de 
 
 ## Administrador
 
-> Role mais alta. É atribuida somente a um utilizador que será o administrador do sistema. Herda todas as permissões das roles abaixo dela.
+> Role mais alta. É atribuida somente a um utilizador que será o administrador do sistema. Herda todas as permissões de Professor e Aluno.
