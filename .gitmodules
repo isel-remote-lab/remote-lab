@@ -1,12 +1,12 @@
 [submodule "core"]
 	path = core
 	url = https://github.com/isel-remote-lab/core.git
-	branch = main
+	branch = master
 [submodule "frontend"]
 	path = frontend
 	url = https://github.com/isel-remote-lab/frontend.git
-	branch = main
+	branch = master
 [submodule "docs"]
 	path = docs
 	url = https://github.com/isel-remote-lab/documentation.git
-	branch = main
+	branch = master
