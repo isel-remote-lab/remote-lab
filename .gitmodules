@@ -14,3 +14,7 @@
 	path = frontend
 	url = https://github.com/isel-remote-lab/frontend.git
 	branch = main
+[submodule "internal"]
+	path = internal
+	url = https://github.com/isel-remote-lab/internal.git
+	branch = main
