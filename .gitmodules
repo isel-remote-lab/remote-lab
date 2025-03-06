@@ -1,6 +1,6 @@
-[submodule "report"]
-	path = report
-	url = https://github.com/isel-remote-lab/report
+[submodule "docs"]
+	path = docs
+	url = https://github.com/isel-remote-lab/documentation.git
 [submodule "core"]
 	path = core
 	url = https://github.com/isel-remote-lab/core.git
