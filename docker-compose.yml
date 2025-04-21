@@ -1,0 +1,32 @@
+services:
+  rl-postgres-dev:
+    container_name: rl-postgres-dev
+    image: rl-postgres-dev
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=changeit
+      - POSTGRES_DB=db
+
+  rl-jvm:
+    container_name: rl-jvm
+    image: rl-jvm
+    environment:
+      PORT: 8080
+      DB_URL: "jdbc:postgresql://rl-postgres-dev:5432/db?user=dbuser&password=changeit"
+
+  rl-node-dev:
+    container_name: rl-node-dev
+    image: rl-node-dev
+    ports:
+      - 8088:8080
+    volumes:
+      - ../../../js:/home/node/js
+    working_dir: /home/node/js
+
+  im-nginx:
+    container_name: im-nginx
+    image: im-nginx
+    ports:
+      - 8080:8088
+    depends_on:
+      - im-jvm
