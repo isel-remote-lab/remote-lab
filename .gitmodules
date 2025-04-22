@@ -10,3 +10,6 @@
 [submodule "private"]
 	path = private
 	url = https://github.com/isel-remote-lab/private
+[submodule "db"]
+	path = db
+	url = https://github.com/isel-remote-lab/db
