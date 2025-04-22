@@ -6,7 +6,7 @@
 	url = https://github.com/isel-remote-lab/api
 [submodule "website"]
 	path = website
-	url = https://github.com/isel-remote-lab/frontend
+	url = https://github.com/isel-remote-lab/website
 [submodule "private"]
 	path = private
 	url = https://github.com/isel-remote-lab/private
