@@ -4,12 +4,12 @@
 [submodule "api"]
 	path = api
 	url = https://github.com/isel-remote-lab/api
+[submodule "db"]
+	path = db
+	url = https://github.com/isel-remote-lab/db
 [submodule "website"]
 	path = website
 	url = https://github.com/isel-remote-lab/website
 [submodule "private"]
 	path = private
 	url = https://github.com/isel-remote-lab/private
-[submodule "db"]
-	path = db
-	url = https://github.com/isel-remote-lab/db
