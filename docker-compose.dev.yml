@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres
+    container_name: rl-db-dev
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dbuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeit}
+      POSTGRES_DB: ${POSTGRES_DB:-rl_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: rl-api-dev
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/rl_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-dbuser}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-changeit}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api:/app
+      - ~/.m2:/root/.m2
+    depends_on:
+      - postgres
+
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile.dev
+    container_name: rl-website-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://app:8080
+      - NODE_ENV=development
+    volumes:
+      - ./website:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+
+volumes:
+  postgres_data_dev: 

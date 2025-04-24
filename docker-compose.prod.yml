@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rl-postgres-prod
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dbuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeit}
+      POSTGRES_DB: ${POSTGRES_DB:-rl_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.prod
+    container_name: rl-app-prod
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/rl_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-dbuser}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-changeit}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./website
+      dockerfile: Dockerfile.prod
+    container_name: rl-frontend-prod
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://app:8080
+      - NODE_ENV=production
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  postgres_data_prod: 
