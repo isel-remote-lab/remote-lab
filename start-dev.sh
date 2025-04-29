@@ -34,6 +34,6 @@ cd ..
 
 # Start Docker Compose development environment
 echo "Starting development environment..."
-docker-compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml up -d
 
 echo "Development environment started successfully!" 
