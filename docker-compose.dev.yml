@@ -12,21 +12,12 @@ services:
       - postgres_data_dev:/var/lib/postgresql/data
 
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+    image: rl-jvm
     container_name: rl-api-dev
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/rl_db
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-dbuser}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-changeit}
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_PROFILES_ACTIVE=dev
+      - DB_URL=jdbc:postgresql://localhost:5432/db
     ports:
       - "8080:8080"
-    volumes:
-      - ./api:/app
-      - ~/.m2:/root/.m2
     depends_on:
       - postgres
 
