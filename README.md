@@ -29,4 +29,13 @@ As mentioned above, this is a final project for the Computer Science and Compute
 - **Compatibility**: Students using ARM-based computers might face compatibility issues with certain FPGAs. For example, ISEL uses the Intel DE-10 Lite in some courses, which may not be compatible with ARM-based systems due to specific software constraints. With this remote approach, students can connect to the laboratory from anywhere at any time and use the hardware without compatibility concerns.
 
 ### Project Details 📄
-TODO
+It's not provided a classic account registration method—instead, authentication is achieved using Microsoft OAuth via the NextAuth framework. The backend also supports other OAuth methods as long as they provide the basic information required by the database. For more details, please refer to the [API repository](https://github.com/isel-remote-lab/api). 
+
+When a user logs in, they are greeted with the home page, where they can view their laboratories, account information, the current active role, an option to switch roles (if they have the proper permissions), and a search bar. If the user is logged in as a *Student*, they can enter a laboratory. In this case, the user joins a waiting queue and receives information about their current position and an estimated waiting time. Since a laboratory may have multiple hardware devices assigned, when the user reaches the front of the queue, they are connected to one of the available devices. At that moment, the dashboard of the laboratory is displayed, allowing real-time hardware visualization and manipulation.
+
+For a *Teacher*, the home page offers additional functionalities. A teacher can create, update, or delete a laboratory. Moreover, teachers can view the page as a Student, as their permissions encompass all student functionalities. Teachers also have the ability to create groups and assign users to these groups. This grouping system is essential because it is the only method for users to join a laboratory. A teacher can assign multiple groups to a laboratory, and only the users in those groups will have access to view and join the laboratory. Note that only the owner of a laboratory is allowed to update its information and configuration.
+
+# Setup 🛠️
+Clone the repository and run the setup script. This script is the easiest way to build the project since it is designed to work with Docker containers. If you prefer to build the project separately—which is not recommended—we highly suggest reviewing the build instructions provided in each repository or examining the Docker Compose files available in this repository.
+
+After executing the setup script, an intuitive setup guide will be displayed. Simply follow the instructions, and by the end you will have the project built and ready to use.
