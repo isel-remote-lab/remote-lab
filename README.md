@@ -1,49 +1,32 @@
-# Remote Lab
+<p align="center"><a href="https://github.com/isel-remote-lab"><img src="https://github.com/isel-remote-lab/remote-lab/blob/main/transparent-logo.png" width="300"/></a></p>
+<p align="center"><b>ISEL Remote Lab</b></p>
+<p align="center">
+  <a href="https://github.com/isel-remote-lab/api"><img alt="API" src="https://img.shields.io/badge/API-orange"></a>
+  <a href="https://github.com/isel-remote-lab/website"><img alt="Website" src="https://img.shields.io/badge/Website-blue"></a>
+  <a href="https://github.com/isel-remote-lab/documentation"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-purple"></a>
+</p>
 
-This project consists in a remote lab with access to a remote FPGA. This remote lab makes possible the remote configuration, visualization and manipulation of the remote FPGA.
+------------------------------
 
-Um aluno, ao aceder ao site, necessita de autenticar-se. Pode criar conta ou fazer login. Caso crie conta precisa de um código gerado pelo Professor. Em ambos os casos, caso haja sucesso na autenticação, o Aluno é reencaminhado para uma home page.
+# Remote Lab 🚀
 
-Na home page terá acesso à sua conta onde poderá fazer as alterações necessárias e logout (baseado no Moodle). No dashboard existem laboratórios que o Aluno está inscrito pelo Professor. O Aluno pode entrar no laboratório. Se o laboratório tiver livre o Aluno entra na sessão. Caso esteja ocupado entra numa fila de espera. Caso tenha marcado previamente uma sessão entra.
+This project is a platform that provides remote laboratories equipped with connected hardware, enabling remote configuration, visualization, and manipulation of these devices. An intuitive website and a RESTful API are provided to interact with the system. For better organization, this repository contains several sub-repositories. As their names indicate, they include all the necessary files for the platform to function. Check out the contents and respective documentation in the following repositories:
+- **[API](https://github.com/isel-remote-lab/api)** -> Contains the API code, along with documentation for the REST API and separate build information for those who wish to build only the API. It was developed using Spring Boot and Kotlin. For more details, please refer to the repository page.
+- **[Website](https://github.com/isel-remote-lab/website)** -> Includes the website code and its respective documentation. This project was developed using Next.js. For additional information, check the repository page.
+- **[Documentation](https://github.com/isel-remote-lab/documentation)** -> Although the above repositories include documentation and wiki pages for build and execution information, this project was developed as a final project for a bachelor’s degree at ISEL. Therefore, a separate repository was created to house the final report and other important documents. Please see the repository page for detailed information or to review specific decisions and additional insights.
 
-Já dentro de um laboratório o Aluno irá, dependendo do laboratório ter acesso ao material fornecido pelo professor para a realização do mesmo. Por exemplo, se o professor definir um laboratório onde se utilize uma FPGA (Intel De10Lite) para a realização do mesmo, o Aluno e/ou o grupo irá conseguir enviar código para a mesma, manipular as suas entradas e ver as suas saídas.
+## What This Project Provides ⚙️
 
-Se o aluno abandonar a sala do laboratório antes do tempo do seu slot terminar, o próximo aluno na fila irá poder entrar então no mesmo laboratório. Antes de este sair do laboratório, se previamente ao fim do seu slot uma mensagem de verificação irá aparecer. Se o aluno exceder o seu slot de tempo, uma mensagem aparece a avisar e o próximo aluno da fila pode então entrar no laboratório.
+- **Remote Laboratories with Hardware Visualization**: By enabling real-time FPGA programming through the website, the platform offers remote laboratories where users can connect and interact with the lab's hardware as needed.
+- **Separated Roles**: Designed for ISEL, the system features a Role-Based Access Control (RBAC) mechanism with distinct roles for Students, Teachers, and Administrators, ensuring that each user has the appropriate permissions.
+- **Security**: By adhering to industry standards and keeping the software up-to-date, the platform minimizes potential vulnerabilities. For further security information, please refer to the [API repository](https://github.com/isel-remote-lab/api).
 
-Um professor, ao aceder ao site, necessita também de se autenticar. Poderá também criar conta ou fazer login. Caso crie uma conta precisará, como o aluno, de um código gerado, desta vez por um Administrador. Em ambos os casos, caso haja sucesso na autenticação, o Professor é reencaminhado para a sua home page.
+## About ℹ️
+As mentioned above, this is a final project for the Computer Science and Computer Engineering bachelor’s degree at [ISEL](https://www.isel.pt/en). Many courses require physical FPGAs for testing VHDL code and manipulating switches. This project addresses several common challenges:
 
-Um professor pode alternar entre visualizar como aluno ou como professor. Ao autenticar-se pode escolher entrar como aluno ou como professor (Baseado no Moodle). 
+- **24/7 Availability**: FPGAs are not always available and are limited in quantity. The developed plataform allows students to access remote laboratories, which can have multiple hardware devices connected simultaneously, ensuring round-the-clock availability.
+- **High Cost**: It is generally unrealistic to expect students to purchase an FPGA or similar hardware due to their high cost.
+- **Compatibility**: Students using ARM-based computers might face compatibility issues with certain FPGAs. For example, ISEL uses the Intel DE-10 Lite in some courses, which may not be compatible with ARM-based systems due to specific software constraints. With this remote approach, students can connect to the laboratory from anywhere at any time and use the hardware without compatibility concerns.
 
-Como professor este terá a possibilidade de, como o aluno ver as definições de conta. Terá também na sua dashboard todas os laboratórios criados. Caso um Professor escolhe um dos laboratórios, este terá as opções de:
-
-# Initial Ideas
-
-> - [ ]  Uso de um código para criação de conta. Este código é gerado pelo Professor. Código único para cada aluno.
-> - [ ]  No dashboard existir um calendário. Este calendário possibilitará a marcação de sessões nos laboratórios.
-> - [ ]  Fila de espera para os laboratórios.
-> - [ ]  Caso o Aluno tenha marcado uma sessão, tem de estar na fila de espera para entrar na mesma para ganhar prioridade.
-> - [ ]  Existir um histório de utilização dos laboratórios.
-
-# Roles
-
-Existem as seguintes roles: Aluno, Professor e Administrador.
-Cada role tem permissões únicas e as roles acima herdam as permissões das de baixo.
-
-## Aluno
-
-> Role mais baixa. É atribuida automaticamente aquando a criação de um conta. Tem as seguintes permissões:
-> - [ ] Entrar em laboratórios.
-> - [ ] Configurar, visualizar e manipular a placa (se estiver dentro de um laboratório).
-> - [ ] Marcar sessões através do calendário.
-> - [ ] Fazer as alterações necessárias na sua conta (Alterações ainda por decidir).
-
-## Professor
-
-> Role intermédia. Esta á atribuida a um docente. Só pode ser atribuida por um utilizador com a role de Professor ou por um Administrador. Esta herda as permissões de Aluno e ainda tem as seguintes permissões:
-> - [ ] Criar/manipular/apagar laboratórios.
-> - [ ] Gerar códigos para utilizadores criarem conta.
-> - [ ] Ver histório de utilização de um laboratório.
-
-## Administrador
-
-> Role mais alta. É atribuida somente a um utilizador que será o administrador do sistema. Herda todas as permissões de Professor e Aluno.
+### Project Details 📄
+TODO
