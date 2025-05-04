@@ -26,10 +26,10 @@ else
 fi
 cd ..
 
-# Run Gradle build and buildImageJvm task in the api directory
+# Run Gradle buildImageJvm task in the api directory
 echo "Building JVM image..."
 cd api || exit 1
-./gradlew build buildImageJvm
+./gradlew buildImageJvm
 cd ..
 
 # Start Docker Compose development environment
