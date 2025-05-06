@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/isel-remote-lab"><img src="https://github.com/isel-remote-lab/remote-lab/blob/main/transparent-logo.png" width="300"/></a></p>
+<p align="center"><a href="https://github.com/isel-remote-lab"><img src="https://github.com/isel-remote-lab/remote-lab/blob/main/img/transparent-logo.png" width="300"/></a></p>
 <p align="center"><b>ISEL Remote Lab</b></p>
 <p align="center">
   <a href="https://github.com/isel-remote-lab/api"><img alt="API" src="https://img.shields.io/badge/API-orange"></a>
