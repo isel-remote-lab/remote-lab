@@ -15,9 +15,9 @@ services:
     image: rl-jvm
     container_name: rl-api-dev
     env_file:
-      - ./private/shared/domain/.env
+      - ./private/shared/secrets/.env
     environment:
-      - DB_URL=jdbc:postgresql://localhost:5432/db
+      - POSTGRES_HOST=postgres
     ports:
       - "8080:8080"
     depends_on:
@@ -32,9 +32,7 @@ services:
       - "3000:3000"
     env_file:
       - ./private/frontend/.env.local
-    environment:
-      - NEXT_PUBLIC_API_URL=http://app:8080
-      - NODE_ENV=development
+      - ./private/shared/secrets/.env
     volumes:
       - ./website:/app
       - /app/node_modules

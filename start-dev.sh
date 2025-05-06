@@ -36,4 +36,10 @@ cd ..
 echo "Starting development environment..."
 docker compose -f docker-compose.dev.yml up -d
 
-echo "Development environment started successfully!" 
+if [ $? -eq 0 ]; then
+    echo "Development environment started successfully!"
+else
+    echo "Failed to start development environment"
+    exit 1
+fi
+
