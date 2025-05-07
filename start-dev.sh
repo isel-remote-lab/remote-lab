@@ -32,6 +32,24 @@ cd api || exit 1
 ./gradlew buildImageJvm
 cd ..
 
+# Load environment variables from secrets directory
+echo "Loading environment variables from secrets..."
+SECRETS_DIR="private/shared/secrets"
+ENV_FILE="$SECRETS_DIR/.env"
+
+if [ -d "$SECRETS_DIR" ]; then
+    if [ -f "$ENV_FILE" ]; then
+        echo "Loading secrets from: $ENV_FILE"
+        set -a
+        source "$ENV_FILE"
+        set +a
+    else
+        echo "Warning: .env file not found in $SECRETS_DIR"
+    fi
+else
+    echo "Warning: Secrets directory $SECRETS_DIR does not exist"
+fi
+
 # Start Docker Compose development environment
 echo "Starting development environment..."
 docker compose -f docker-compose.dev.yml up -d
