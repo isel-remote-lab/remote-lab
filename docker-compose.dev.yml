@@ -1,8 +1,8 @@
 services:
   db:
     build:
-      context: ./api/repository-jdbi
-      dockerfile: docker/Dockerfile.dev
+      context: ./db
+      dockerfile: Dockerfile.dev
     container_name: rl-db-dev
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
