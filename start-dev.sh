@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# Update submodules and switch api and website to develop branch
-echo "Updating submodules to develop branch..."
-git submodule update --init --recursive
-
 # Switch api to develop
 echo "Switching api to develop branch..."
 cd api || exit 1
 if git show-ref --verify --quiet refs/heads/develop; then
+    echo "Checking out develop branch..."
     git checkout develop
 else
     echo "Error: develop branch does not exist in api"
