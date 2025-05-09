@@ -40,5 +40,7 @@ services:
       - ./private/shared/secrets/.env
     volumes:
       - ./website:/app
+      - /app/node_modules
+      - /app/.next
     depends_on:
       - api
