@@ -12,6 +12,9 @@ services:
       - "5432:5432"
 
   api:
+    #build:
+    #  context: ./api
+    #  dockerfile: docker/Dockerfile.dev
     image: rl-jvm
     container_name: rl-api-dev
     env_file:
@@ -20,6 +23,8 @@ services:
       - POSTGRES_HOST=db
     ports:
       - "8080:8080"
+    #volumes:
+    #  - ./api:/app
     depends_on:
       - db
 

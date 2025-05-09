@@ -49,7 +49,7 @@ fi
 
 # Start Docker Compose development environment
 echo "Starting development environment..."
-docker compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml up -
 
 if [ $? -eq 0 ]; then
     echo "Development environment started successfully!"
@@ -58,3 +58,5 @@ else
     exit 1
 fi
 
+# Show the logs of all the containers
+docker compose -f docker-compose.dev.yml logs -f
