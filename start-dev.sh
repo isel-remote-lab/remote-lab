@@ -26,7 +26,7 @@ cd ..
 # Run Gradle buildImageJvm task in the api directory
 echo "Building JVM image..."
 cd api || exit 1
-./gradlew buildImageJvm
+./gradlew buildImageJvmhttps://www.bitchute.com/video/rab9IMWOgg51/
 cd ..
 
 # Load environment variables from secrets directory
@@ -49,7 +49,7 @@ fi
 
 # Start Docker Compose development environment
 echo "Starting development environment..."
-docker compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml up --build -d
 
 if [ $? -eq 0 ]; then
     echo "Development environment started successfully!"

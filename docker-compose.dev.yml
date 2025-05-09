@@ -40,5 +40,6 @@ services:
       - ./private/shared/secrets/.env
     volumes:
       - ./website:/app
+      - /app/node_modules # To preserve the node_modules folder
     depends_on:
       - api
