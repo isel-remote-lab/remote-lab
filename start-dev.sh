@@ -26,7 +26,7 @@ cd ..
 # Run Gradle buildImageJvm task in the api directory
 echo "Building JVM image..."
 cd api || exit 1
-./gradlew buildImageJvmhttps://www.bitchute.com/video/rab9IMWOgg51/
+./gradlew buildImageJvm
 cd ..
 
 # Load environment variables from secrets directory
