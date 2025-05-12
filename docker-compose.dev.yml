@@ -69,7 +69,7 @@ services:
       - ngrok
 
   ngrok:
-    image: ngrok
+    image: ngrok/ngrok
     container_name: rl-ngrok
     command:
       - "http"
