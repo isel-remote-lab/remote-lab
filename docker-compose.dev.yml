@@ -59,8 +59,6 @@ services:
   nginx:
     image: nginx
     container_name: rl-nginx
-    ports:
-      - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
@@ -68,9 +66,24 @@ services:
       - website
     networks:
       - api-website
+      - ngrok
+
+  ngrok:
+    image: ngrok
+    container_name: rl-ngrok
+    command:
+      - "http"
+      - "http://nginx:80"
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - 80:4040
+    networks:
+      - ngrok
 
 networks:
   db-api:
   api-website:
+  ngrok:
 volumes:
   db:
