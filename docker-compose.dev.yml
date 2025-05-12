@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - rl-db-data:/var/lib/postgresql/data
 
   api:
     #build:
@@ -35,6 +37,7 @@ services:
     volumes:
       - ./website:/app
       - /app/node_modules # To preserve the node_modules folder
+      - /app/.next # To preserve the .next folder for the compilations
     depends_on:
       - api
   
@@ -49,3 +52,6 @@ services:
       - api
       - db
       - website
+  
+volumes:
+  rl-db-data:
