@@ -10,6 +10,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - rl-db-data:/var/lib/postgresql/data
+    networks:
+      - db-network
 
   api:
     #build:
@@ -25,6 +27,9 @@ services:
     #  - ./api:/app
     depends_on:
       - db
+    networks:
+      - db-network
+      - api-network
 
   website:
     build:
@@ -40,6 +45,9 @@ services:
       - /app/.next # To preserve the .next folder for the compilations
     depends_on:
       - api
+    networks:
+      - api-network
+      - website-network
   
   nginx:
     image: nginx
@@ -52,6 +60,13 @@ services:
       - api
       - db
       - website
-  
+    networks:
+      - api-network
+      - website-network
+
+networks:
+  db-network:
+  api-network:
+  website-network:
 volumes:
   rl-db-data:
