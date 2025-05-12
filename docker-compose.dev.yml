@@ -39,8 +39,8 @@ services:
       - api
   
   nginx:
-    image: nginx:latest
-    container_name: rl-nginx-dev
+    image: nginx
+    container_name: rl-nginx
     ports:
       - "80:80"
     volumes:
