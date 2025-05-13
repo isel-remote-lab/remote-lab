@@ -45,18 +45,17 @@ if [ "$ENV_TYPE" = "prod" ]; then
     # In production, we don't mount the website directory
     export WEBSITE_VOLUME=""
     export NODE_MODULES_VOLUME=""
-    # Set NEXTAUTH_URL to the environment URL in production
-    export NEXTAUTH_URL="$URL"
 else
     export WEBSITE_VOLUME="./website:/app"
     export NODE_MODULES_VOLUME="/app/node_modules"
-    # Set NEXTAUTH_URL to localhost in development
-    #export NEXTAUTH_URL="http://localhost"
-    export NEXTAUTH_URL="https://rl.pi.at.eu.org"
 fi
 
-export START_API_ONLY
-export START_CLOUDFLARE
+if [ "$START_CLOUDFLARE" = "true" ]; then
+    export NEXTAUTH_URL=$URL
+else
+    export NEXTAUTH_URL="http://localhost"
+fi
+
 # Set API port if starting API only
 if [ "$START_API_ONLY" = "true" ]; then
     export API_PORT="8080"
