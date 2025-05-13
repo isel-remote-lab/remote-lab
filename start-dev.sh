@@ -47,8 +47,6 @@ else
     echo "Warning: Secrets directory $SECRETS_DIR does not exist"
 fi
 
-echo "NGROK_AUTHTOKEN: $NGROK_AUTHTOKEN"
-
 # Start Docker Compose development environment
 echo "Starting development environment..."
 docker compose -f docker-compose.dev.yml up --build -d
