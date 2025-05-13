@@ -17,7 +17,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    profiles:
+      - api
+      - full
 
   api:
     image: rl-api
@@ -32,7 +34,9 @@ services:
     networks:
       - db-api
       - api-website
-    restart: unless-stopped
+    profiles:
+      - api
+      - full
 
   website:
     build:
@@ -49,7 +53,8 @@ services:
       - api
     networks:
       - api-website
-    restart: unless-stopped
+    profiles:
+      - full
   
   nginx:
     image: ${NGINX_IMAGE:-nginx}
@@ -64,7 +69,8 @@ services:
     networks:
       - api-website
       - cloudflare
-    restart: always
+    profiles:
+      - full
 
   cloudflared:
     image: cloudflare/cloudflared
@@ -76,7 +82,8 @@ services:
       - cloudflare
     depends_on:
       - nginx
-    restart: unless-stopped
+    profiles:
+      - prod
 
 networks:
   db-api:

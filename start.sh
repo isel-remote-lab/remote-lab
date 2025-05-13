@@ -1,13 +1,21 @@
 #!/bin/bash
 
-# Check if environment type is provided
-if [ "$1" != "dev" ] && [ "$1" != "prod" ]; then
-    echo "Usage: $0 [dev|prod]"
-    echo "Please specify either 'dev' or 'prod' as an argument"
-    exit 1
+# Check if first argument is 'api'
+if [ "$1" = "api" ]; then
+    ENV_TYPE="dev"
+    START_API_ONLY="true"
+else
+    # Set default environment type to dev if not provided
+    ENV_TYPE=${1:-dev}
+    if [ "$ENV_TYPE" != "dev" ] && [ "$ENV_TYPE" != "prod" ]; then
+        echo "Usage: $0 [dev|prod] [api]"
+        echo "Please specify either 'dev' or 'prod' as an argument"
+        echo "Optionally, add 'api' as second argument to start only the API"
+        exit 1
+    fi
+    START_API_ONLY=$([ "$2" = "api" ] && echo "true" || echo "false")
 fi
 
-ENV_TYPE=$1
 BRANCH_NAME=$([ "$ENV_TYPE" = "dev" ] && echo "develop" || echo "main")
 
 # Set environment variables for Docker Compose
@@ -35,16 +43,19 @@ else
 fi
 cd ..
 
-# Switch website to appropriate branch
-echo "Switching website to $BRANCH_NAME branch..."
-cd website || exit 1
-if git show-ref --verify --quiet refs/heads/$BRANCH_NAME; then
-    git checkout $BRANCH_NAME
-else
-    echo "Error: $BRANCH_NAME branch does not exist in website"
-    exit 1
+# Only switch website branch if not starting API only
+if [ "$START_API_ONLY" = "false" ]; then
+    # Switch website to appropriate branch
+    echo "Switching website to $BRANCH_NAME branch..."
+    cd website || exit 1
+    if git show-ref --verify --quiet refs/heads/$BRANCH_NAME; then
+        git checkout $BRANCH_NAME
+    else
+        echo "Error: $BRANCH_NAME branch does not exist in website"
+        exit 1
+    fi
+    cd ..
 fi
-cd ..
 
 # Run Gradle buildImageJvm task in the api directory
 echo "Building JVM image..."
@@ -74,7 +85,16 @@ fi
 
 # Start Docker Compose environment
 echo "Starting $ENV_TYPE environment..."
-docker compose up --build -d
+command="docker compose"
+if [ "$START_API_ONLY" = "true" ]; then
+    command="$command --profile api"
+else 
+    command="$command --profile full"
+fi
+if [ "$ENV_TYPE" = "prod" ]; then
+    command="$command --profile prod"
+fi    
+$command up --build -d
 
 if [ $? -eq 0 ]; then
     echo "$ENV_TYPE environment started successfully!"
@@ -84,4 +104,4 @@ else
 fi
 
 # Show the logs of all the containers
-docker compose logs -f 
+$command logs -f
