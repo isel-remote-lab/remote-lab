@@ -31,14 +31,24 @@ BRANCH_NAME=$([ "$ENV_TYPE" = "dev" ] && echo "develop" || echo "main")
 # Set environment variables for Docker Compose
 export ENV_TYPE
 if [ "$ENV_TYPE" = "prod" ]; then
-    export DOCKERFILE="Dockerfile"
     # In production, we don't mount the website directory
     export WEBSITE_VOLUME=""
     export NODE_MODULES_VOLUME=""
+    # Set NEXTAUTH_URL to the environment URL in production
+    export NEXTAUTH_URL="$URL"
 else
-    export DOCKERFILE="Dockerfile.dev"
     export WEBSITE_VOLUME="./website:/app"
     export NODE_MODULES_VOLUME="/app/node_modules"
+    # Set NEXTAUTH_URL to localhost in development
+    export NEXTAUTH_URL="http://localhost"
+fi
+
+export START_API_ONLY
+# Set API port if starting API only
+if [ "$START_API_ONLY" = "true" ]; then
+    export API_PORT="8080"
+else
+    export API_PORT=""
 fi
 
 # Switch api to appropriate branch
