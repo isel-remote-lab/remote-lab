@@ -19,7 +19,7 @@ else
         echo "  dev|d        Start development environment (default)"
         echo "  prod|p       Start production environment"
         echo "  api|a        Start only the API in development mode"
-        echo "  cloudflare|c Start cloudflared tunnel (only in development)"
+        echo "  cloudflare|c Start development environment with cloudflared tunnel"
         echo
         echo "Examples:"
         echo "  $0             # Start development environment"
@@ -27,7 +27,7 @@ else
         echo "  $0 d c         # Start development environment with cloudflared"
         echo "  $0 p           # Start production environment"
         echo "  $0 a           # Start only the API in development mode"
-        echo "  $0 c           # Start cloudflared tunnel (only in development)"
+        echo "  $0 c           # Start development environment with cloudflared tunnel"
         exit 1
     fi
     START_API_ONLY=$([ "$2" = "api" ] && echo "true" || echo "false")
@@ -46,14 +46,10 @@ if [ "$ENV_TYPE" = "prod" ]; then
     export WEBSITE_VOLUME=""
     export NODE_MODULES_VOLUME=""
 else
+    # Expose the database port to the host machine in dev environment
+    export DB_PORT="5432"
     export WEBSITE_VOLUME="./website:/app"
     export NODE_MODULES_VOLUME="/app/node_modules"
-fi
-
-if [ "$START_CLOUDFLARE" = "true" ]; then
-    export NEXTAUTH_URL=$URL
-else
-    export NEXTAUTH_URL="http://localhost"
 fi
 
 # Set API port if starting API only
@@ -113,6 +109,13 @@ if [ -d "$SECRETS_DIR" ]; then
 else
     echo "Error: Secrets directory $SECRETS_DIR does not exist"
     exit 1
+fi
+
+# Set NEXTAUTH_URL based on START_CLOUDFLARE
+if [ "$START_CLOUDFLARE" = "true" ]; then
+    export NEXTAUTH_URL="$URL"
+else
+    export NEXTAUTH_URL="http://localhost"
 fi
 
 # Start Docker Compose environment

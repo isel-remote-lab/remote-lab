@@ -4,6 +4,8 @@ services:
       context: ./db
       dockerfile: Dockerfile
     container_name: rl-db-${ENV_TYPE:-dev}
+    ports:
+      - ${DB_PORT:-}:5432
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -45,11 +47,12 @@ services:
       context: ./website
       dockerfile: Dockerfile.${ENV_TYPE:-dev}
     container_name: rl-website-${ENV_TYPE:-dev}
+    environment:
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
+      - NEXT_PUBLIC_NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
     env_file:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
-    environment:
-      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
     volumes:
       - ${WEBSITE_VOLUME:-./website:/app}
       - ${NODE_MODULES_VOLUME:-/app/node_modules}
