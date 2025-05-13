@@ -41,8 +41,6 @@ services:
     env_file:
       - ./private/frontend/.env.local
       - ./private/shared/secrets/.env
-    environment:
-      - NEXTAUTH_URL=https://${NGROK_URL}
     volumes:
       - ./website:/app
       - /app/node_modules # To preserve the node_modules folder
@@ -64,26 +62,8 @@ services:
       - website
     networks:
       - api-website
-      #- ngrok
       - cloudflare
     restart: always
-
-  #ngrok:
-  #  image: ngrok/ngrok
-  #  container_name: rl-ngrok
-  #  command:
-  #    - http
-  #    - --url=${NGROK_URL}
-  #    - http://nginx:80
-  #  environment:
-  #    NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-  #  ports:
-  #    - 4040:4040
-  #  networks:
-  #    - ngrok
-  #  depends_on:
-  #    - nginx
-  #  restart: unless-stopped
 
   cloudflared:
     image: cloudflare/cloudflared
@@ -100,7 +80,6 @@ services:
 networks:
   db-api:
   api-website:
-  #ngrok:
   cloudflare:
 volumes:
   db:
