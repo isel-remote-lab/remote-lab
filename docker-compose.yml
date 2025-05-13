@@ -2,7 +2,7 @@ services:
   db:
     build:
       context: ./db
-      dockerfile: ${DOCKERFILE:-Dockerfile.dev}
+      dockerfile: Dockerfile
     container_name: rl-db-${ENV_TYPE:-dev}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -37,10 +37,10 @@ services:
   website:
     build:
       context: ./website
-      dockerfile: ${DOCKERFILE:-Dockerfile.dev}
+      dockerfile: Dockerfile.${ENV_TYPE:-dev}
     container_name: rl-website-${ENV_TYPE:-dev}
     env_file:
-      - ./private/frontend/.env.local
+      - ./private/frontend/.env
       - ./private/shared/secrets/.env
     volumes:
       - ${WEBSITE_VOLUME:-./website:/app}

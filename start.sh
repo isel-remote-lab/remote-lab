@@ -72,13 +72,6 @@ else
     exit 1
 fi
 
-# Check for environment file
-FRONTEND_ENV="private/frontend/.env.$([ "$ENV_TYPE" = "dev" ] && echo "local" || echo "production")"
-if [ ! -f "$FRONTEND_ENV" ]; then
-    echo "Error: Environment file not found at $FRONTEND_ENV"
-    exit 1
-fi
-
 # Start Docker Compose environment
 echo "Starting $ENV_TYPE environment..."
 docker compose up --build -d
