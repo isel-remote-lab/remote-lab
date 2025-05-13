@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
 
   api:
-    image: rl-jvm
+    image: rl-api
     container_name: rl-api-${ENV_TYPE:-dev}
     env_file:
       - ./private/shared/secrets/.env
