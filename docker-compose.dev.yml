@@ -26,7 +26,6 @@ services:
       - ./private/shared/secrets/.env
     environment:
       - POSTGRES_HOST=db
-      - NEXTAUTH_URL=${NGROK_URL}
     depends_on:
       db:
         condition: service_healthy
@@ -42,6 +41,8 @@ services:
     env_file:
       - ./private/frontend/.env.local
       - ./private/shared/secrets/.env
+    environment:
+      - NEXTAUTH_URL=https://${NGROK_URL}
     volumes:
       - ./website:/app
       - /app/node_modules # To preserve the node_modules folder
@@ -63,22 +64,35 @@ services:
       - website
     networks:
       - api-website
-      - ngrok
+      #- ngrok
+      - cloudflare
     restart: always
 
-  ngrok:
-    image: ngrok/ngrok
-    container_name: rl-ngrok
-    command:
-      - http
-      - --url=${NGROK_URL}
-      - http://nginx:80
+  #ngrok:
+  #  image: ngrok/ngrok
+  #  container_name: rl-ngrok
+  #  command:
+  #    - http
+  #    - --url=${NGROK_URL}
+  #    - http://nginx:80
+  #  environment:
+  #    NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+  #  ports:
+  #    - 4040:4040
+  #  networks:
+  #    - ngrok
+  #  depends_on:
+  #    - nginx
+  #  restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: rl-cloudflared
+    command: tunnel run
     environment:
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    ports:
-      - 4040:4040
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
-      - ngrok
+      - cloudflare
     depends_on:
       - nginx
     restart: unless-stopped
@@ -86,6 +100,7 @@ services:
 networks:
   db-api:
   api-website:
-  ngrok:
+  #ngrok:
+  cloudflare:
 volumes:
   db:
