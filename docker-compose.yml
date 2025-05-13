@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
   
   nginx:
-    image: nginx:stable-alpine
+    image: ${NGINX_IMAGE:-nginx}
     container_name: rl-nginx-${ENV_TYPE:-dev}
     ports:
       - 80:80
