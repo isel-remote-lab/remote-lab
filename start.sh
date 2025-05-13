@@ -8,9 +8,19 @@ else
     # Set default environment type to dev if not provided
     ENV_TYPE=${1:-dev}
     if [ "$ENV_TYPE" != "dev" ] && [ "$ENV_TYPE" != "prod" ]; then
-        echo "Usage: $0 [dev|prod] [api]"
-        echo "Please specify either 'dev' or 'prod' as an argument"
-        echo "Optionally, add 'api' as second argument to start only the API"
+        echo "Usage: $0 [dev|prod|api]"
+        echo
+        echo "Options:"
+        echo "  dev     Start development environment (default)"
+        echo "  prod    Start production environment"
+        echo "  api     Start only the API in development mode"
+        echo
+        echo "Examples:"
+        echo "  $0          # Start development environment"
+        echo "  $0 dev      # Start development environment"
+        echo "  $0 prod     # Start production environment"
+        echo "  $0 api      # Start only the API in development mode"
+        echo "  $0 prod api # Start only the API in production mode"
         exit 1
     fi
     START_API_ONLY=$([ "$2" = "api" ] && echo "true" || echo "false")
