@@ -1,29 +1,40 @@
 #!/bin/bash
 
 # Check if first argument is 'api'
-if [ "$1" = "api" ]; then
+if [ "$1" = "api" ] || [ "$1" = "a" ]; then
     ENV_TYPE="dev"
     START_API_ONLY="true"
+    START_CLOUDFLARE="false"
+elif [ "$1" = "cloudflare" ] || [ "$1" = "c" ]; then
+    ENV_TYPE="dev"
+    START_API_ONLY="false"
+    START_CLOUDFLARE="true"
 else
     # Set default environment type to dev if not provided
     ENV_TYPE=${1:-dev}
     if [ "$ENV_TYPE" != "dev" ] && [ "$ENV_TYPE" != "prod" ]; then
-        echo "Usage: $0 [dev|prod|api]"
+        echo "Usage: $0 [dev|d|prod|p|api|a|cloudflare|c] [api|a|cloudflare|c]"
         echo
         echo "Options:"
-        echo "  dev     Start development environment (default)"
-        echo "  prod    Start production environment"
-        echo "  api     Start only the API in development mode"
+        echo "  dev|d        Start development environment (default)"
+        echo "  prod|p       Start production environment"
+        echo "  api|a        Start only the API in development mode"
+        echo "  cloudflare|c Start cloudflared tunnel (only in development)"
         echo
         echo "Examples:"
-        echo "  $0          # Start development environment"
-        echo "  $0 dev      # Start development environment"
-        echo "  $0 prod     # Start production environment"
-        echo "  $0 api      # Start only the API in development mode"
-        echo "  $0 prod api # Start only the API in production mode"
+        echo "  $0             # Start development environment"
+        echo "  $0 d           # Start development environment"
+        echo "  $0 d c         # Start development environment with cloudflared"
+        echo "  $0 p           # Start production environment"
+        echo "  $0 a           # Start only the API in development mode"
+        echo "  $0 c           # Start cloudflared tunnel (only in development)"
         exit 1
     fi
     START_API_ONLY=$([ "$2" = "api" ] && echo "true" || echo "false")
+    # Only check for cloudflare option in development environment
+    if [ "$ENV_TYPE" = "dev" ]; then
+        START_CLOUDFLARE=$([ "$2" = "cloudflare" ] || [ "$2" = "c" ] && echo "true" || echo "false")
+    fi
 fi
 
 BRANCH_NAME=$([ "$ENV_TYPE" = "dev" ] && echo "develop" || echo "main")
@@ -45,6 +56,7 @@ else
 fi
 
 export START_API_ONLY
+export START_CLOUDFLARE
 # Set API port if starting API only
 if [ "$START_API_ONLY" = "true" ]; then
     export API_PORT="8080"
@@ -115,6 +127,9 @@ fi
 if [ "$ENV_TYPE" = "prod" ]; then
     command="$command --profile prod"
 fi    
+if [ "$START_CLOUDFLARE" = "true" ]; then
+    command="$command --profile cloudflare"
+fi
 $command up --build -d
 
 if [ $? -eq 0 ]; then
