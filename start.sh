@@ -35,10 +35,14 @@ if [ "$ENV_TYPE" = "prod" ]; then
     # In production, we don't mount the website directory
     export WEBSITE_VOLUME=""
     export NODE_MODULES_VOLUME=""
+    # Set NEXTAUTH_URL to the environment URL in production
+    export NEXTAUTH_URL="$URL"
 else
     export DOCKERFILE="Dockerfile.dev"
     export WEBSITE_VOLUME="./website:/app"
     export NODE_MODULES_VOLUME="/app/node_modules"
+    # Set NEXTAUTH_URL to localhost in development
+    export NEXTAUTH_URL="http://localhost"
 fi
 
 # Set API port if starting API only
