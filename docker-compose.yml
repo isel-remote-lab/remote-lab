@@ -2,8 +2,8 @@ services:
   db:
     build:
       context: ./db
-      dockerfile: Dockerfile.dev
-    container_name: rl-db-dev
+      dockerfile: ${DOCKERFILE:-Dockerfile.dev}
+    container_name: rl-db-${ENV_TYPE:-dev}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -21,7 +21,7 @@ services:
 
   api:
     image: rl-jvm
-    container_name: rl-api-dev
+    container_name: rl-api-${ENV_TYPE:-dev}
     env_file:
       - ./private/shared/secrets/.env
     environment:
@@ -32,18 +32,19 @@ services:
     networks:
       - db-api
       - api-website
+    restart: unless-stopped
 
   website:
     build:
       context: ./website
-      dockerfile: Dockerfile.dev
-    container_name: rl-website-dev
+      dockerfile: ${DOCKERFILE:-Dockerfile.dev}
+    container_name: rl-website-${ENV_TYPE:-dev}
     env_file:
       - ./private/frontend/.env.local
       - ./private/shared/secrets/.env
     volumes:
-      - ./website:/app
-      - /app/node_modules # To preserve the node_modules folder
+      - ${WEBSITE_VOLUME:-./website:/app}
+      - ${NODE_MODULES_VOLUME:-/app/node_modules}
     depends_on:
       - api
     networks:
@@ -51,8 +52,8 @@ services:
     restart: unless-stopped
   
   nginx:
-    image: nginx
-    container_name: rl-nginx
+    image: nginx:stable-alpine
+    container_name: rl-nginx-${ENV_TYPE:-dev}
     ports:
       - 80:80
     volumes:
@@ -67,7 +68,7 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared
-    container_name: rl-cloudflared
+    container_name: rl-cloudflared-${ENV_TYPE:-dev}
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
@@ -82,4 +83,4 @@ networks:
   api-website:
   cloudflare:
 volumes:
-  db:
+  db: 
