@@ -84,6 +84,7 @@ services:
       - nginx
     profiles:
       - prod
+      - full
 
 networks:
   db-api:
