@@ -41,6 +41,13 @@ else
     export NODE_MODULES_VOLUME="/app/node_modules"
 fi
 
+# Set API port if starting API only
+if [ "$START_API_ONLY" = "true" ]; then
+    export API_PORT="8080"
+else
+    export API_PORT=""
+fi
+
 # Switch api to appropriate branch
 echo "Switching api to $BRANCH_NAME branch..."
 cd api || exit 1
