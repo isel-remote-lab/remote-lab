@@ -40,7 +40,8 @@ else
     export WEBSITE_VOLUME="./website:/app"
     export NODE_MODULES_VOLUME="/app/node_modules"
     # Set NEXTAUTH_URL to localhost in development
-    export NEXTAUTH_URL="http://localhost"
+    #export NEXTAUTH_URL="http://localhost"
+    export NEXTAUTH_URL="https://rl.pi.at.eu.org"
 fi
 
 export START_API_ONLY
