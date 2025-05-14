@@ -5,10 +5,12 @@ if [ "$1" = "api" ] || [ "$1" = "a" ]; then
     ENV_TYPE="dev"
     START_API_ONLY="true"
     START_CLOUDFLARE="false"
+    echo "Starting API only in development environment..."
 elif [ "$1" = "cloudflare" ] || [ "$1" = "c" ]; then
     ENV_TYPE="dev"
     START_API_ONLY="false"
     START_CLOUDFLARE="true"
+    echo "Starting development environment with cloudflared tunnel..."
 else
     # Set default environment type to dev if not provided
     ENV_TYPE=${1:-dev}
