@@ -41,6 +41,17 @@ fi
 
 BRANCH_NAME=$([ "$ENV_TYPE" = "dev" ] && echo "develop" || echo "main")
 
+# For dev environment, check if 'develop' branch exists in 'api' remote, if not, fall back to 'main'
+if [ "$ENV_TYPE" = "dev" ]; then
+    cd api || exit 1
+    git fetch origin --quiet
+    if ! git show-ref --verify --quiet refs/remotes/origin/develop; then
+        echo "Warning: 'develop' branch not found in remote 'origin' for api repository. Falling back to 'main' branch."
+        BRANCH_NAME="main"
+    fi
+    cd ..
+fi
+
 # Set environment variables for Docker Compose
 export ENV_TYPE
 if [ "$ENV_TYPE" = "prod" ]; then
@@ -64,11 +75,25 @@ fi
 # Switch api to appropriate branch
 echo "Switching api to $BRANCH_NAME branch..."
 cd api || exit 1
+echo "Fetching updates from origin for api repository..."
+git fetch origin --quiet
+
+# Check if branch exists locally
 if git show-ref --verify --quiet refs/heads/$BRANCH_NAME; then
-    echo "Checking out $BRANCH_NAME branch..."
-    git checkout $BRANCH_NAME
+    echo "Checking out local branch $BRANCH_NAME in api..."
+    if ! git checkout $BRANCH_NAME --quiet; then
+        echo "Error: Failed to checkout existing local branch $BRANCH_NAME in api."
+        exit 1
+    fi
+# Else, check if branch exists on remote origin and create it locally
+elif git show-ref --verify --quiet refs/remotes/origin/$BRANCH_NAME; then
+    echo "Local branch $BRANCH_NAME not found in api. Creating from origin/$BRANCH_NAME..."
+    if ! git checkout -b $BRANCH_NAME origin/$BRANCH_NAME --quiet; then
+        echo "Error: Failed to create and checkout $BRANCH_NAME from origin/$BRANCH_NAME in api."
+        exit 1
+    fi
 else
-    echo "Error: $BRANCH_NAME branch does not exist in api"
+    echo "Error: Branch $BRANCH_NAME does not exist locally or on remote 'origin' for the api repository."
     exit 1
 fi
 cd ..
@@ -78,10 +103,25 @@ if [ "$START_API_ONLY" = "false" ]; then
     # Switch website to appropriate branch
     echo "Switching website to $BRANCH_NAME branch..."
     cd website || exit 1
+    echo "Fetching updates from origin for website repository..."
+    git fetch origin --quiet
+
+    # Check if branch exists locally
     if git show-ref --verify --quiet refs/heads/$BRANCH_NAME; then
-        git checkout $BRANCH_NAME
+        echo "Checking out local branch $BRANCH_NAME in website..."
+        if ! git checkout $BRANCH_NAME --quiet; then
+            echo "Error: Failed to checkout existing local branch $BRANCH_NAME in website."
+            exit 1
+        fi
+    # Else, check if branch exists on remote origin and create it locally
+    elif git show-ref --verify --quiet refs/remotes/origin/$BRANCH_NAME; then
+        echo "Local branch $BRANCH_NAME not found in website. Creating from origin/$BRANCH_NAME..."
+        if ! git checkout -b $BRANCH_NAME origin/$BRANCH_NAME --quiet; then
+            echo "Error: Failed to create and checkout $BRANCH_NAME from origin/$BRANCH_NAME in website."
+            exit 1
+        fi
     else
-        echo "Error: $BRANCH_NAME branch does not exist in website"
+        echo "Error: Branch $BRANCH_NAME does not exist locally or on remote 'origin' for the website repository."
         exit 1
     fi
     cd ..

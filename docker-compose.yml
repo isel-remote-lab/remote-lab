@@ -56,6 +56,7 @@ services:
     volumes:
       - ${WEBSITE_VOLUME:-./website:/app}
       - ${NODE_MODULES_VOLUME:-/app/node_modules}
+      - ${DOMAIN_CONFIG_VOLUME:-./api/host/src/main/resources/domain-config.json:/app/domain-config.json}
     depends_on:
       - api
     networks:
