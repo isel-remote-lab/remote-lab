@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - db:/var/lib/postgresql/data
+      - db-${ENV_TYPE:-dev}:/var/lib/postgresql/data
     networks:
       - db-api
     healthcheck:
@@ -25,7 +25,7 @@ services:
 
   api:
     image: rl-api
-    container_name: rl-api-${ENV_TYPE:-dev}
+    container_name: rl-api
     env_file:
       - ./private/shared/secrets/.env
     environment:
@@ -35,7 +35,7 @@ services:
         condition: service_healthy
     networks:
       - db-api
-      - api-website
+      - api-website-nginx
     ports:
       - ${API_PORT:-}:8080
     profiles:
@@ -44,12 +44,19 @@ services:
 
   website:
     build:
-      context: ./website
-      dockerfile: Dockerfile.${ENV_TYPE:-dev}
+      dockerfile: website/Dockerfile.${ENV_TYPE:-dev}
+      args:
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
+        NEXT_PUBLIC_NEXTAUTH_URL: ${NEXTAUTH_URL}
+        AUTH_SECRET: ${AUTH_SECRET}
+        AUTH_MICROSOFT_ENTRA_ID_ID: ${AUTH_MICROSOFT_ENTRA_ID_ID}
+        AUTH_MICROSOFT_ENTRA_ID_SECRET: ${AUTH_MICROSOFT_ENTRA_ID_SECRET}
+        API_KEY: ${API_KEY}
     container_name: rl-website-${ENV_TYPE:-dev}
     environment:
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
       - NEXT_PUBLIC_NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
+      - DOMAIN_CONFIG_PATH=../../domain-config.json
     env_file:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
@@ -60,13 +67,13 @@ services:
     depends_on:
       - api
     networks:
-      - api-website
+      - api-website-nginx
     profiles:
       - full
   
   nginx:
     image: ${NGINX_IMAGE:-nginx}
-    container_name: rl-nginx-${ENV_TYPE:-dev}
+    container_name: rl-nginx
     ports:
       - 80:80
     volumes:
@@ -75,19 +82,19 @@ services:
       - api
       - website
     networks:
-      - api-website
-      - cloudflare
+      - api-website-nginx
+      - nginx-cloudflare
     profiles:
       - full
 
   cloudflared:
     image: cloudflare/cloudflared
-    container_name: rl-cloudflared-${ENV_TYPE:-dev}
+    container_name: rl-cloudflared
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
-      - cloudflare
+      - nginx-cloudflare
     depends_on:
       - nginx
     profiles:
@@ -96,7 +103,9 @@ services:
 
 networks:
   db-api:
-  api-website:
-  cloudflare:
+  api-website-nginx:
+  nginx-cloudflare:
+
 volumes:
-  db: 
+  db-dev:
+  db-prod:
