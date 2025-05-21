@@ -13,3 +13,6 @@
 [submodule "private"]
 	path = private
 	url = https://github.com/isel-remote-lab/private
+[submodule "SI/SisInf-Project-24-25"]
+	path = SI/SisInf-Project-24-25
+	url = https://github.com/G43T43D-SI-ISEL/SisInf-Project-24-25
