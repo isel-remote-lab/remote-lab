@@ -134,12 +134,6 @@ if [ "$SWITCH_BRANCH" = "true" ]; then
     fi
 fi
 
-# Run Gradle buildImageJvm task in the api directory
-echo "Building JVM image..."
-cd api || exit 1
-./gradlew buildImageJvm
-cd ..
-
 # Load environment variables from secrets directory
 echo "Loading environment variables from secrets..."
 SECRETS_DIR="private/shared/secrets"

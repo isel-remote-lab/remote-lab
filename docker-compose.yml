@@ -24,7 +24,10 @@ services:
       - full
 
   api:
-    image: rl-api
+    #image: rl-api
+    build:
+      context: ./api
+      dockerfile: docker/Dockerfile
     container_name: rl-api
     env_file:
       - ./private/shared/secrets/.env
