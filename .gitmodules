@@ -13,3 +13,6 @@
 [submodule "private"]
 	path = private
 	url = https://github.com/isel-remote-lab/private
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/isel-remote-lab/remote-lab.wiki.git
