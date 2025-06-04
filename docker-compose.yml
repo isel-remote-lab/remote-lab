@@ -64,8 +64,11 @@ services:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
     volumes:
-      - ${WEBSITE_VOLUME:-./website:/app}
-      - ${NODE_MODULES_VOLUME:-/app/node_modules}
+      #- ${WEBSITE_VOLUME:-./website:/app}
+      #- ${NODE_MODULES_VOLUME:-/app/node_modules}
+      - ./website:/app
+      - ./website/node_modules:/app/node_modules
+      - next-volume:/app/.next
       - ${DOMAIN_CONFIG_VOLUME:-./api/host/src/main/resources/domain-config.json:/app/domain-config.json}
     depends_on:
       - api
@@ -112,3 +115,4 @@ networks:
 volumes:
   db-dev:
   db-prod:
+  next-volume:

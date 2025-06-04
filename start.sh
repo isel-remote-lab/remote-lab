@@ -13,7 +13,14 @@ elif [ "$1" = "cloudflare" ] || [ "$1" = "c" ]; then
     echo "Starting development environment with cloudflared tunnel..."
 else
     # Set default environment type to dev if not provided
-    ENV_TYPE=${1:-dev}
+    case "$1" in
+        d) ENV_TYPE="dev" ;;
+        p) ENV_TYPE="prod" ;;
+        dev) ENV_TYPE="dev" ;;
+        prod) ENV_TYPE="prod" ;;
+        "" ) ENV_TYPE="dev" ;;
+        *) ENV_TYPE="$1" ;;
+    esac
     if [ "$ENV_TYPE" != "dev" ] && [ "$ENV_TYPE" != "prod" ]; then
         echo "Usage: $0 [dev|d|prod|p|api|a|cloudflare|c] [switch|s|api|a|cloudflare|c] [api|a|cloudflare|c]"
         echo
@@ -34,13 +41,31 @@ else
         echo "  $0 c           # Start development environment with cloudflared tunnel"
         exit 1
     fi
-    START_API_ONLY=$([ "$2" = "api" ] || [ "$2" = "a" ] || [ "$3" = "api" ] || [ "$3" = "a" ] && echo "true" || echo "false")
+    START_API_ONLY=$(
+        if [ "$2" = "api" ] || [ "$2" = "a" ] || [ "$3" = "api" ] || [ "$3" = "a" ]; then
+            echo "true"
+        else
+            echo "false"
+        fi
+    )
 
-    SWITCH_BRANCH=$([ "$2" = "switch" ] || [ "$2" = "s" ] || [ "$3" = "switch" ] || [ "$3" = "s" ] && echo "true" || echo "false")
+    SWITCH_BRANCH=$(
+        if [ "$2" = "switch" ] || [ "$2" = "s" ] || [ "$3" = "switch" ] || [ "$3" = "s" ]; then
+            echo "true"
+        else
+            echo "false"
+        fi
+    )
 
     # Only check for cloudflare option in development environment
     if [ "$ENV_TYPE" = "dev" ]; then
-        START_CLOUDFLARE=$([ "$2" = "cloudflare" ] || [ "$2" = "c" ] && echo "true" || echo "false")
+        START_CLOUDFLARE=$(
+            if [ "$2" = "cloudflare" ] || [ "$2" = "c" ]; then
+                echo "true"
+            else
+                echo "false"
+            fi
+        )
     fi
 fi
 
@@ -59,15 +84,15 @@ fi
 
 # Set environment variables for Docker Compose
 export ENV_TYPE
-if [ "$ENV_TYPE" = "prod" ]; then
-    # In production, we don't mount the website directory
-    export WEBSITE_VOLUME=""
-    export NODE_MODULES_VOLUME=""
-else
+if [ "$ENV_TYPE" = "dev" ]; then
     # Expose the database port to the host machine in dev environment
     export DB_PORT="5432"
-    export WEBSITE_VOLUME="./website:/app"
-    export NODE_MODULES_VOLUME="/app/node_modules"
+    #export WEBSITE_VOLUME="./website:/app"
+    #export NODE_MODULES_VOLUME="/app/node_modules"
+#else
+    # In production, we don't mount the website directory
+    #export WEBSITE_VOLUME=""
+    #export NODE_MODULES_VOLUME=""
 fi
 
 # Set API port if starting API only
@@ -188,6 +213,10 @@ fi
 if [ "$START_CLOUDFLARE" = "true" ]; then
     command="$command --profile cloudflare"
 fi
+
+# Enable Docker Compose Bake for faster builds
+export COMPOSE_BAKE=1
+
 $command up --build -d
 
 if [ $? -eq 0 ]; then
