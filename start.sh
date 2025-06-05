@@ -87,12 +87,9 @@ export ENV_TYPE
 if [ "$ENV_TYPE" = "dev" ]; then
     # Expose the database port to the host machine in dev environment
     export DB_PORT="5432"
-    #export WEBSITE_VOLUME="./website:/app"
-    #export NODE_MODULES_VOLUME="/app/node_modules"
-#else
-    # In production, we don't mount the website directory
-    #export WEBSITE_VOLUME=""
-    #export NODE_MODULES_VOLUME=""
+else
+    # In production, we don't mount the .next directory
+    export NEXT_VOLUME="next-volume:/app/.next"
 fi
 
 # Set API port if starting API only
