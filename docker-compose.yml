@@ -50,24 +50,23 @@ services:
       dockerfile: website/Dockerfile.${ENV_TYPE:-dev}
       args:
         NEXTAUTH_URL: ${NEXTAUTH_URL}
-        NEXT_PUBLIC_NEXTAUTH_URL: ${NEXTAUTH_URL}
         AUTH_SECRET: ${AUTH_SECRET}
         AUTH_MICROSOFT_ENTRA_ID_ID: ${AUTH_MICROSOFT_ENTRA_ID_ID}
         AUTH_MICROSOFT_ENTRA_ID_SECRET: ${AUTH_MICROSOFT_ENTRA_ID_SECRET}
         API_KEY: ${API_KEY}
+        DOMAIN_CONFIG_PATH: /app/domain-config.json
+        NEXT_TELEMETRY_DISABLED: 1
     container_name: rl-website-${ENV_TYPE:-dev}
     environment:
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
-      - NEXT_PUBLIC_NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
-      - DOMAIN_CONFIG_PATH=../../domain-config.json
+      - DOMAIN_CONFIG_PATH=/app/domain-config.json
+      - NEXT_TELEMETRY_DISABLED=1
     env_file:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
     volumes:
-      - ./website:/app # Mount the website directory
-      - ./website/node_modules:/app/node_modules # Mount the node_modules directory
-      - ${NEXT_VOLUME:-./website/.next:/app/.next} # Mount the .next directory
-      - ${DOMAIN_CONFIG_VOLUME:-./api/host/src/main/resources/domain-config.json:/app/domain-config.json}
+      - ${WEBSITE_VOLUME:-./website:/app}
+      - ./api/host/src/main/resources/domain-config.json:/app/domain-config.json
     depends_on:
       - api
     networks:
@@ -113,4 +112,3 @@ networks:
 volumes:
   db-dev:
   db-prod:
-  next-volume:

@@ -66,6 +66,8 @@ else
                 echo "false"
             fi
         )
+    else
+        START_CLOUDFLARE="true"
     fi
 fi
 
@@ -85,11 +87,13 @@ fi
 # Set environment variables for Docker Compose
 export ENV_TYPE
 if [ "$ENV_TYPE" = "dev" ]; then
+    export WEBSITE_VOLUME="./website:/app"
+
     # Expose the database port to the host machine in dev environment
     export DB_PORT="5432"
 else
-    # In production, we don't mount the .next directory
-    export NEXT_VOLUME="next-volume:/app/.next"
+    # In production, we don't mount the website directory
+    export WEBSITE_VOLUME=""
 fi
 
 # Set API port if starting API only
@@ -214,7 +218,7 @@ fi
 # Enable Docker Compose Bake for faster builds
 export COMPOSE_BAKE=1
 
-$command up --build -d
+$command up -d --build
 
 if [ $? -eq 0 ]; then
     echo "$ENV_TYPE environment started successfully!"
