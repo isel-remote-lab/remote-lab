@@ -11,6 +11,10 @@ elif [ "$1" = "cloudflare" ] || [ "$1" = "c" ]; then
     START_API_ONLY="false"
     START_CLOUDFLARE="true"
     echo "Starting development environment with cloudflared tunnel..."
+elif [ "$1" = "logs" ] || [ "$1" = "l" ]; then
+    # Show logs without restarting
+    docker compose logs -f
+    exit 0
 else
     # Set default environment type to dev if not provided
     case "$1" in
@@ -22,7 +26,7 @@ else
         *) ENV_TYPE="$1" ;;
     esac
     if [ "$ENV_TYPE" != "dev" ] && [ "$ENV_TYPE" != "prod" ]; then
-        echo "Usage: $0 [dev|d|prod|p|api|a|cloudflare|c] [switch|s|api|a|cloudflare|c] [api|a|cloudflare|c]"
+        echo "Usage: $0 [dev|d|prod|p|api|a|cloudflare|c|logs|l] [switch|s|api|a|cloudflare|c] [api|a|cloudflare|c]"
         echo
         echo "Options:"
         echo "  dev|d        Start development environment (default)"
@@ -30,6 +34,7 @@ else
         echo "  switch|s     Switch to the dev or prod branch"
         echo "  api|a        Start only the API in development mode"
         echo "  cloudflare|c Start development environment with cloudflared tunnel (default in prod environment)"
+        echo "  logs|l       Show logs without restarting containers"
         echo
         echo "Examples:"
         echo "  $0             # Start development environment"
@@ -39,6 +44,7 @@ else
         echo "  $0 p s         # Start production environment and switch to dev branch"
         echo "  $0 a           # Start only the API in development mode"
         echo "  $0 c           # Start development environment with cloudflared tunnel"
+        echo "  $0 l           # Show logs"
         exit 1
     fi
     START_API_ONLY=$(
