@@ -54,19 +54,16 @@ services:
         AUTH_MICROSOFT_ENTRA_ID_ID: ${AUTH_MICROSOFT_ENTRA_ID_ID}
         AUTH_MICROSOFT_ENTRA_ID_SECRET: ${AUTH_MICROSOFT_ENTRA_ID_SECRET}
         API_KEY: ${API_KEY}
-        DOMAIN_CONFIG_PATH: /app/domain-config.json
         NEXT_TELEMETRY_DISABLED: 1
     container_name: rl-website-${ENV_TYPE:-dev}
     environment:
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
-      - DOMAIN_CONFIG_PATH=/app/domain-config.json
       - NEXT_TELEMETRY_DISABLED=1
     env_file:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
     volumes:
       - ${WEBSITE_VOLUME:-./website:/app}
-      - ./api/host/src/main/resources/domain-config.json:/app/domain-config.json
     depends_on:
       - api
     networks:
