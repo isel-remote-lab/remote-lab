@@ -63,7 +63,10 @@ services:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
     volumes:
-      - ${WEBSITE_VOLUME:-./website:/app}
+      - ${WEBSITE_VOLUME:-./website/src:/app/src}
+      - ${WEBSITE_VOLUME:-./website/public:/app/public}
+      - ${WEBSITE_VOLUME:-./website/next.config.js:/app/next.config.js}
+      - ${WEBSITE_VOLUME:-./website/tsconfig.json:/app/tsconfig.json}
     depends_on:
       - api
     networks:

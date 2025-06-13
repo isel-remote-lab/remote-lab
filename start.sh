@@ -93,8 +93,6 @@ fi
 # Set environment variables for Docker Compose
 export ENV_TYPE
 if [ "$ENV_TYPE" = "dev" ]; then
-    export WEBSITE_VOLUME="./website:/app"
-
     # Expose the database port to the host machine in dev environment
     export DB_PORT="5432"
 else
