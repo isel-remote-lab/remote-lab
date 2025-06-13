@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: rl-db-${ENV_TYPE:-dev}
     ports:
-      - ${DB_PORT:-}:5432
+      - ${DB_PORT:-5432}:5432
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -40,7 +40,7 @@ services:
       - db-api
       - api-website-nginx
     ports:
-      - ${API_PORT:-}:8080
+      - ${API_PORT:-8080}:8080
     profiles:
       - api
       - full
@@ -58,15 +58,9 @@ services:
     container_name: rl-website-${ENV_TYPE:-dev}
     environment:
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
-      - NEXT_TELEMETRY_DISABLED=1
     env_file:
       - ./private/frontend/.env
       - ./private/shared/secrets/.env
-    volumes:
-      - ${WEBSITE_VOLUME:-./website/src:/app/src}
-      - ${WEBSITE_VOLUME:-./website/public:/app/public}
-      - ${WEBSITE_VOLUME:-./website/next.config.js:/app/next.config.js}
-      - ${WEBSITE_VOLUME:-./website/tsconfig.json:/app/tsconfig.json}
     depends_on:
       - api
     networks:
@@ -74,6 +68,17 @@ services:
     profiles:
       - full
   
+  website-dev:
+    extends:
+      service: website
+    profiles:
+      - dev
+    volumes:
+      - ${WEBSITE_DEV_FOLDER:-./}src:/app/src
+      - ${WEBSITE_DEV_FOLDER:-./}public:/app/public
+      - ${WEBSITE_DEV_FOLDER:-./}next.config.js:/app/next.config.js
+      - ${WEBSITE_DEV_FOLDER:-./}tsconfig.json:/app/tsconfig.json
+
   nginx:
     image: ${NGINX_IMAGE:-nginx}
     container_name: rl-nginx

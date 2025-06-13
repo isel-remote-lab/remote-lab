@@ -93,11 +93,12 @@ fi
 # Set environment variables for Docker Compose
 export ENV_TYPE
 if [ "$ENV_TYPE" = "dev" ]; then
+    export WEBSITE_DEV_FOLDER="./website"
     # Expose the database port to the host machine in dev environment
     export DB_PORT="5432"
 else
     # In production, we don't mount the website directory
-    export WEBSITE_VOLUME=""
+    # export WEBSITE_VOLUME=""
 fi
 
 # Set API port if starting API only
@@ -211,6 +212,9 @@ if [ "$START_API_ONLY" = "true" ]; then
     command="$command --profile api"
 else 
     command="$command --profile full"
+fi
+if [ "$ENV_TYPE" = "dev" ]; then
+    command="$command --profile dev"
 fi
 if [ "$ENV_TYPE" = "prod" ]; then
     command="$command --profile prod"
