@@ -55,7 +55,7 @@ services:
         AUTH_MICROSOFT_ENTRA_ID_SECRET: ${AUTH_MICROSOFT_ENTRA_ID_SECRET}
         API_KEY: ${API_KEY}
         NEXT_TELEMETRY_DISABLED: 1
-    container_name: rl-website-${ENV_TYPE:-dev}
+    container_name: rl-website-prod
     environment:
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost}
     env_file:
@@ -71,6 +71,7 @@ services:
   website-dev:
     extends:
       service: website-prod
+    container_name: rl-website-dev
     profiles:
       - dev
     volumes:
