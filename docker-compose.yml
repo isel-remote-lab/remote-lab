@@ -45,7 +45,7 @@ services:
       - api
       - full
 
-  website:
+  website-prod:
     build:
       dockerfile: website/Dockerfile.${ENV_TYPE:-dev}
       args:
@@ -66,11 +66,11 @@ services:
     networks:
       - api-website-nginx
     profiles:
-      - full
+      - prod
   
   website-dev:
     extends:
-      service: website
+      service: website-prod
     profiles:
       - dev
     volumes:
@@ -88,7 +88,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - api
-      - website
+      - website-${ENV_TYPE:-dev}
     networks:
       - api-website-nginx
       - nginx-cloudflare

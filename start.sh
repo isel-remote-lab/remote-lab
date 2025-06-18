@@ -96,7 +96,7 @@ if [ "$ENV_TYPE" = "dev" ]; then
     export WEBSITE_DEV_FOLDER="./website"
     # Expose the database port to the host machine in dev environment
     export DB_PORT="5432"
-else
+#else
     # In production, we don't mount the website directory
     # export WEBSITE_VOLUME=""
 fi
