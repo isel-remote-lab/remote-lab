@@ -3,15 +3,10 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: rl-db-${ENV_TYPE:-dev}
-    ports:
-      - ${DB_PORT:-5432}:5432
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - db-${ENV_TYPE:-dev}:/var/lib/postgresql/data
     networks:
       - db-api
     healthcheck:
@@ -19,12 +14,29 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  db-dev:
+    extends:
+      service: db
+    container_name: rl-db-dev
+    ports:
+      - 5432:5432
     profiles:
+      - dev
+    volumes:
+      - db-dev:/var/lib/postgresql/data
+
+  db-prod:
+    extends:
+      service: db
+    container_name: rl-db-prod
+    profiles:
+      - prod
       - api
-      - full
+    volumes:
+      - db-prod:/var/lib/postgresql/data
 
   api:
-    #image: rl-api
     build:
       context: ./api
       dockerfile: docker/Dockerfile
@@ -39,11 +51,17 @@ services:
     networks:
       - db-api
       - api-website-nginx
-    ports:
-      - ${API_PORT:-8080}:8080
+    profiles:
+      - full
+
+  api-only:
+    extends:
+      service: api
+    container_name: rl-api-only
     profiles:
       - api
-      - full
+    ports:
+      - 8080:8080
 
   website-prod:
     build:

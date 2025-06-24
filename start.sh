@@ -94,15 +94,6 @@ fi
 export ENV_TYPE
 if [ "$ENV_TYPE" = "dev" ]; then
     export WEBSITE_DEV_FOLDER="./website/"
-    # Expose the database port to the host machine in dev environment
-    export DB_PORT="5432"
-fi
-
-# Set API port if starting API only
-if [ "$START_API_ONLY" = "true" ]; then
-    export API_PORT="8080"
-else
-    export API_PORT=""
 fi
 
 # Switch api to appropriate branch
