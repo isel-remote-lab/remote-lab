@@ -153,18 +153,19 @@ async def main():
     hardware_name = str(sys.argv[1])
     serial_number = str(sys.argv[2])
     initial_state = "A" # Available
-    port = str(sys.argv[3])
-    ip_address = "localhost:" + port
+    ip_address = str(sys.argv[3])
+    port = str(sys.argv[4])
+    uri = ip_address + port
     
 
     data = {
         "name": hardware_name,
         "serialNumber": serial_number,
         "status": initial_state,
-        "ipAddress": ip_address
+        "ipAddress": uri
     }
 
-    res = requests.post(url = "http://localhost:8080/api/v1/hardware", json = data, headers={"X-API-Key": os.environ.get("API_KEY")})
+    res = requests.post(url = "https://rl.isel.at.eu.org/api/v1/hardware", json = data, headers={"X-API-Key": os.environ.get("API_KEY")})
     response = json.loads(res.text)
     print(response)
 
@@ -172,8 +173,8 @@ async def main():
     server.setup_pty()
     
     try:
-        async with websockets.serve(server.handle_client, "localhost", int(port)):
-            print("WebSocket PTY server started on ws://localhost:6060")
+        async with websockets.serve(server.handle_client, ip_address, int(port)):
+            print("WebSocket PTY server started on ws://" + ip_address + ":" + port) 
             print("Press Ctrl+C to stop the server")
             await asyncio.Future()  # Run forever
             

@@ -121,11 +121,14 @@ services:
       - cloudflare-hardware
     profiles:
       - demo
+    ports:
+      - 1906:1906
 
 networks:
   db-api:
   api-website-nginx:
   nginx-cloudflare:
+  cloudflare-hardware:
 
 volumes:
   db-dev:

@@ -5,4 +5,4 @@ ENV API_KEY=${API_KEY}
 
 COPY dist/rl-websocket/rl-websocket /usr/local/bin/rl-websocket
 
-CMD ["rl-websocket", "hardware-example", "0", "6000"]
+CMD ["rl-websocket", "hardware-example-1", "123.213.123", "hardware-example", "1906"]
