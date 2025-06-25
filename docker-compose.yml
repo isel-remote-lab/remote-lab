@@ -126,6 +126,7 @@ networks:
   db-api:
   api-website-nginx:
   nginx-cloudflare:
+  cloudflare-hardware:
 
 volumes:
   db-dev:

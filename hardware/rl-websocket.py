@@ -146,7 +146,7 @@ class PTYServer:
             os.close(self.master_fd)
 
 async def main():
-    if sys.argv.__len__() != 4:
+    if sys.argv.__len__() < 3:
         print("Invalid arguments")
         sys.exit()
 
@@ -154,7 +154,8 @@ async def main():
     serial_number = str(sys.argv[2])
     initial_state = "A" # Available
     port = str(sys.argv[3])
-    ip_address = "localhost:" + port
+    address = str(sys.argv[4]) if sys.argv.__len__() > 4 else "localhost"
+    ip_address = address + ":" + port
     
 
     data = {
