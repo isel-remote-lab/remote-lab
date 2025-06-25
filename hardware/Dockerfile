@@ -1,17 +1,14 @@
-FROM --platform=linux/amd64 ubuntu:22.04
+FROM python:3.10-slim
+
+RUN python3 -m pip install websockets requests
 
 ARG API_KEY
 ENV API_KEY=${API_KEY}
 
-# Install CA certificates for HTTPS requests
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
-COPY dist/rl-websocket/ ./
+COPY rl-websocket.py ./
 
-CMD ["./rl-websocket", "hardware-example-1", "123.213.123", "hardware-example", "1906"]
+CMD ["python3", "rl-websocket.py", "hardware-example-1", "123.213.123", "localhost", "1906"]
 
 EXPOSE 1906
