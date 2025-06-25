@@ -121,6 +121,7 @@ services:
       - cloudflare-hardware
     profiles:
       - demo
+      - full
     ports:
       - 1906:1906
 
