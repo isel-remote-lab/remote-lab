@@ -50,7 +50,7 @@
  [],
  False,
  False,
- 1750862834,
+ 1750864739,
  [('run',
    '/home/ang3lo/.local/lib/python3.10/site-packages/PyInstaller/bootloader/Linux-64bit-intel/run',
    'EXECUTABLE')],

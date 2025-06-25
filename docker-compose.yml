@@ -119,6 +119,8 @@ services:
       - API_KEY=${API_KEY}
     networks:
       - cloudflare-hardware
+    depends_on:
+      - cloudflared
     profiles:
       - demo
       - full
