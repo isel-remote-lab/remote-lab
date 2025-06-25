@@ -103,11 +103,24 @@ services:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
       - nginx-cloudflare
+      - cloudflare-hardware
     depends_on:
       - nginx
     profiles:
       - prod
       - cloudflare
+    
+  hardware-example:
+    build:
+      context: ./hardware
+      dockerfile: Dockerfile
+    container_name: rl-hardware-example
+    environment:
+      - API_KEY=${API_KEY}
+    networks:
+      - cloudflare-hardware
+    profiles:
+      - demo
 
 networks:
   db-api:
