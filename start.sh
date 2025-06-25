@@ -47,7 +47,7 @@ for arg in "$@"; do
             echo "  -prod|-p      Start production environment"
             echo "  -api|-a       Start only the API in development mode"
             echo "  -cloudflare|-c Start with cloudflared tunnel"
-            echo "  -demo|-dm     Enable demo mode (use with dev/prod/api)"
+            echo "  -demo|-dm     Enable demo mode (use with dev/prod/api) or run dev with cloudflare if used alone"
             echo "  -switch|-s    Switch to the appropriate branch"
             echo "  -logs|-l      Show logs without restarting containers"
             echo
@@ -55,6 +55,7 @@ for arg in "$@"; do
             echo "  $0             # Start development environment"
             echo "  $0 -dev        # Start development environment"
             echo "  $0 -d          # Start development environment (short)"
+            echo "  $0 -dm         # Start development environment with cloudflare (demo shortcut)"
             echo "  $0 -dev -dm    # Start development environment in demo mode"
             echo "  $0 -d -dm      # Start development environment in demo mode (short)"
             echo "  $0 -prod -dm   # Start production environment in demo mode"
@@ -71,20 +72,15 @@ for arg in "$@"; do
     esac
 done
 
-# Validate demo mode usage - demo cannot be used alone
+# Special case: if only -dm is used, run dev with cloudflare
+if [ "$DEMO_MODE" = "true" ] && [ "$ENV_TYPE" = "dev" ] && [ "$START_API_ONLY" = "false" ] && [ "$START_CLOUDFLARE" = "false" ] && [ "$#" -eq 1 ]; then
+    echo "Demo mode shortcut detected: Starting development environment with cloudflare..."
+    START_CLOUDFLARE="true"
+    DEMO_MODE="false"
+fi
+
+# Validate demo mode usage - demo cannot be used alone (except for the shortcut above)
 if [ "$DEMO_MODE" = "true" ]; then
-    # Check if demo is used with a valid environment
-    if [ "$ENV_TYPE" = "dev" ] && [ "$START_API_ONLY" = "false" ] && [ "$#" -eq 1 ]; then
-        echo "Error: Demo mode (-demo/-dm) cannot be used alone."
-        echo "Demo mode must be used in combination with an environment type."
-        echo
-        echo "Examples:"
-        echo "  $0 -dev -dm    # Development environment in demo mode"
-        echo "  $0 -prod -dm   # Production environment in demo mode"
-        echo "  $0 -api -dm    # API only in demo mode"
-        exit 1
-    fi
-    
     # Check if demo is used with only cloudflare or other modifiers
     if [ "$ENV_TYPE" = "dev" ] && [ "$START_API_ONLY" = "false" ] && [ "$START_CLOUDFLARE" = "true" ] && [ "$#" -eq 2 ]; then
         echo "Error: Demo mode (-demo/-dm) must be used with an environment type, not just modifiers."
