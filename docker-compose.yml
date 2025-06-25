@@ -103,7 +103,6 @@ services:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
       - nginx-cloudflare
-      - cloudflare-hardware
     depends_on:
       - nginx
     profiles:
@@ -118,7 +117,7 @@ services:
     environment:
       - API_KEY=${API_KEY}
     networks:
-      - cloudflare-hardware
+      - api-website-nginx
     depends_on:
       - cloudflared
     profiles:
@@ -131,7 +130,6 @@ networks:
   db-api:
   api-website-nginx:
   nginx-cloudflare:
-  cloudflare-hardware:
 
 volumes:
   db-dev:
