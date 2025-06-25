@@ -146,7 +146,7 @@ class PTYServer:
             os.close(self.master_fd)
 
 async def main():
-    if sys.argv.__len__() < 3:
+    if sys.argv.__len__() < 5:
         print("Invalid arguments")
         sys.exit()
 
