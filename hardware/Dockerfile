@@ -1,14 +1,15 @@
-FROM python:3.10-slim
+FROM node
 
-RUN python3 -m pip install websockets requests
+WORKDIR /app
+COPY package.json ./
+
+RUN npm install
+
+COPY rl-websocket.js ./
 
 ARG API_KEY
 ENV API_KEY=${API_KEY}
 
-WORKDIR /app
-
-COPY rl-websocket.py ./
-
-CMD ["python3", "rl-websocket.py", "hardware-example-1", "123.213.123", "localhost", "1906"]
+CMD ["node", "rl-websocket.js"]
 
 EXPOSE 1906
