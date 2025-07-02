@@ -37,9 +37,21 @@ services:
         condition: service_healthy
     networks:
       - db-api
+      - api-redis
       - api-website-nginx
     ports:
       - ${API_PORT:-8080}:8080
+    profiles:
+      - api
+      - full
+
+  redis:
+    image: redis:latest
+    container_name: rl-redis
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+    networks:
+      - api-redis
     profiles:
       - api
       - full
@@ -128,6 +140,7 @@ services:
 
 networks:
   db-api:
+  api-redis:
   api-website-nginx:
   nginx-cloudflare:
 
