@@ -72,11 +72,11 @@ for arg in "$@"; do
     esac
 done
 
-# Special case: if only -dm is used, run dev with cloudflare
+# Special case: if only -dm is used, run dev with cloudflare and demo mode
 if [ "$DEMO_MODE" = "true" ] && [ "$ENV_TYPE" = "dev" ] && [ "$START_API_ONLY" = "false" ] && [ "$START_CLOUDFLARE" = "false" ] && [ "$#" -eq 1 ]; then
-    echo "Demo mode shortcut detected: Starting development environment with cloudflare..."
+    echo "Demo mode shortcut detected: Starting development environment with cloudflare and demo mode..."
     START_CLOUDFLARE="true"
-    DEMO_MODE="false"
+    # Keep DEMO_MODE="true" to enable the demo profile for hardware-example
 fi
 
 # Validate demo mode usage - demo cannot be used alone (except for the shortcut above)
