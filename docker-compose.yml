@@ -90,6 +90,7 @@ services:
       - ${WEBSITE_DEV_FOLDER:-./}public:/app/public
       - ${WEBSITE_DEV_FOLDER:-./}next.config.js:/app/next.config.js
       - ${WEBSITE_DEV_FOLDER:-./}tsconfig.json:/app/tsconfig.json
+      - website-next-cache:/app/.next
 
   nginx:
     image: nginx
@@ -146,3 +147,4 @@ networks:
 volumes:
   db-dev:
   db-prod:
+  website-next-cache:
