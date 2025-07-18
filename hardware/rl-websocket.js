@@ -20,6 +20,13 @@ wss.on('connection', (ws, _) => {
     cwd: process.env.HOME,
     env: process.env
   })
+
+  // Run neofetch after shell starts
+  setTimeout(() => {
+    if (ptyProcess) {
+      ptyProcess.write('neofetch\r')
+    }
+  }, 500)
   
   // Send shell output to client
   ptyProcess.onData((data) => {
