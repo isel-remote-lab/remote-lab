@@ -1,14 +1,13 @@
-FROM node
+FROM archlinux:latest
 
 WORKDIR /app
-COPY package.json package-lock.json ./
-COPY package.json package-lock.json ./
+
+# Install nodejs, npm and neofetch from official repos
+RUN pacman -Sy --noconfirm base-devel nodejs npm python3 fastfetch
+
 COPY package.json package-lock.json ./
 
 RUN npm install
-
-# Install neofetch
-RUN apt-get update && apt-get install -y neofetch && rm -rf /var/lib/apt/lists/*
 
 COPY rl-websocket.js ./
 

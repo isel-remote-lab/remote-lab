@@ -24,7 +24,7 @@ wss.on('connection', (ws, _) => {
   // Run neofetch after shell starts
   setTimeout(() => {
     if (ptyProcess) {
-      ptyProcess.write('neofetch\r')
+      ptyProcess.write('fastfetch\r')
     }
   }, 500)
   
