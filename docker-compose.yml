@@ -122,12 +122,12 @@ services:
       - prod
       - cloudflare
     
-  hardware:
+  hardware-demo-1:
     build:
       context: ./hardware
       dockerfile: Dockerfile
-    container_name: rl-hardware-example
-    hostname: rl-hw-1
+    container_name: rl-hardware-demo-1
+    hostname: hardware-1
     environment:
       - API_KEY=${API_KEY}
     networks:
@@ -138,6 +138,14 @@ services:
       - demo
     ports:
       - 1906:1906
+  
+  hardware-demo-2:
+    extends:
+      service: hardware-demo-1
+    container_name: rl-hardware-demo-2
+    hostname: hardware-2
+    ports:
+      - 2000:2000
 
 networks:
   db-api:
