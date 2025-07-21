@@ -126,6 +126,7 @@ services:
     build:
       context: ./hardware
       dockerfile: Dockerfile
+    platform: linux/amd64
     container_name: rl-hardware-example
     hostname: rl-hw-1
     environment:
