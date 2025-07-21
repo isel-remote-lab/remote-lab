@@ -102,9 +102,12 @@ services:
     depends_on:
       - api
       - website-${ENV_TYPE:-dev}
+      - hardware-demo-1
+      - hardware-demo-2
     networks:
       - api-website-nginx
       - nginx-cloudflare
+      - nginx-hardware
     profiles:
       - full
 
@@ -132,9 +135,7 @@ services:
     environment:
       - API_KEY=${API_KEY}
     networks:
-      - api-website-nginx
-    depends_on:
-      - cloudflared
+      - nginx-hardware
     profiles:
       - demo
     ports:
@@ -150,9 +151,7 @@ services:
     environment:
       - API_KEY=${API_KEY}
     networks:
-      - api-website-nginx
-    depends_on:
-      - cloudflared
+      - nginx-hardware
     profiles:
       - demo
     ports:
@@ -163,6 +162,7 @@ networks:
   api-redis:
   api-website-nginx:
   nginx-cloudflare:
+  nginx-hardware:
 
 volumes:
   db-dev:
