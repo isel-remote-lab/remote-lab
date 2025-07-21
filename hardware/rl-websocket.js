@@ -3,11 +3,12 @@ const os = require('os')
 const pty = require('node-pty')
 const { spawn } = require('child_process')
 
-const wss = new WebSocket.Server({ port: 1906 })
+// Get port from command line argument or default to 1906
+const port = process.argv[2] ? parseInt(process.argv[2], 10) : 1906;
 
-console.log('WebSocket server started on port 1906')
+const wss = new WebSocket.Server({ port })
 
-const allowedOrigins = ['http://localhost'];
+console.log(`WebSocket server started on port ${port}`)
 
 wss.on('connection', (ws, _) => {
   console.log('Client connected')
@@ -28,7 +29,8 @@ wss.on('connection', (ws, _) => {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({
         type: 'output',
-        data: fastfetchOutput
+        // Wrap the output in triple backticks for markdown formatting
+        data: '```' + fastfetchOutput + '```'
       }))
     }
 

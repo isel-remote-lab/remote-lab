@@ -145,7 +145,7 @@ services:
     container_name: rl-hardware-demo-2
     hostname: hardware-2
     ports:
-      - 2000:2000
+      - 2000:1906
 
 networks:
   db-api:
