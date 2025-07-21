@@ -141,10 +141,20 @@ services:
       - 1906:1906
   
   hardware-demo-2:
-    extends:
-      service: hardware-demo-1
+    build:
+      context: ./hardware
+      dockerfile: Dockerfile
+    platform: linux/amd64
     container_name: rl-hardware-demo-2
     hostname: hardware-2
+    environment:
+      - API_KEY=${API_KEY}
+    networks:
+      - api-website-nginx
+    depends_on:
+      - cloudflared
+    profiles:
+      - demo
     ports:
       - 2000:1906
 
