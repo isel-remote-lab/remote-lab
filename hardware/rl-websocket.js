@@ -23,25 +23,6 @@ wss.on('connection', (ws, _) => {
     env: process.env
   })
 
-  // Run fastfetch and send its output to the client (not via pty)
-  const fastfetch = spawn('fastfetch')
-  let fastfetchOutput = ''
-
-  fastfetch.stdout.on('data', (data) => {
-    fastfetchOutput += data.toString()
-  })
-
-  fastfetch.stderr.on('data', (data) => {
-    fastfetchOutput += data.toString()
-  })
-
-  fastfetch.on('close', (code) => {
-    if (ws.readyState === WebSocket.OPEN) {
-      // Send fastfetch output as if it was terminal output
-      ptyProcess.write(fastfetchOutput)
-    }
-  })
-
   // Send shell output to client
   ptyProcess.onData((data) => {
     if (ws.readyState === WebSocket.OPEN) {

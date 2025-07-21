@@ -5,6 +5,8 @@ WORKDIR /app
 # Install nodejs, npm and neofetch from official repos
 RUN pacman -Sy --noconfirm base-devel nodejs npm python3 fastfetch
 
+RUN echo 'fastfetch' >> /etc/bash.bashrc
+
 COPY package.json package-lock.json ./
 
 RUN npm install
