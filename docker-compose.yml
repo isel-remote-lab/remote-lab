@@ -92,39 +92,6 @@ services:
       - ${WEBSITE_DEV_FOLDER:-./}tsconfig.json:/app/tsconfig.json
       - website-next-cache:/app/.next
 
-  nginx:
-    image: nginx
-    container_name: rl-nginx
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx/default.${ENV_TYPE:-dev}.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - api
-      - website-${ENV_TYPE:-dev}
-      - hardware-demo-1
-      - hardware-demo-2
-    networks:
-      - api-website-nginx
-      - nginx-cloudflare
-      - nginx-hardware
-    profiles:
-      - full
-
-  cloudflared:
-    image: cloudflare/cloudflared
-    container_name: rl-cloudflared
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    networks:
-      - nginx-cloudflare
-    depends_on:
-      - nginx
-    profiles:
-      - prod
-      - cloudflare
-    
   hardware-demo-1:
     build:
       context: ./hardware
@@ -156,6 +123,37 @@ services:
       - demo
     ports:
       - 2000:1906
+
+  nginx:
+    image: nginx
+    container_name: rl-nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/default.${ENV_TYPE:-dev}.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
+      - website-${ENV_TYPE:-dev}
+    networks:
+      - api-website-nginx
+      - nginx-cloudflare
+      - nginx-hardware
+    profiles:
+      - full
+
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: rl-cloudflared
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - nginx-cloudflare
+    depends_on:
+      - nginx
+    profiles:
+      - prod
+      - cloudflare
 
 networks:
   db-api:
